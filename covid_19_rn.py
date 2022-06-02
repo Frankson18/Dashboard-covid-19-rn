@@ -1,5 +1,3 @@
-from tkinter import Grid
-from unicodedata import name
 import pandas as pd
 import plotly.express as px
 import streamlit as st
