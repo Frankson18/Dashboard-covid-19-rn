@@ -97,17 +97,18 @@ def municipios_obitos (df,municipios,serra_caiada,geojson):
   return fig,max,min
 
 def faixa_idade(dados_idade):
-  dados_idade.groupby('fx_etaria').sum('total')
-  max = ('faixa etaria:',dados_idade.groupby('fx_etaria').sum('total')['total'].idxmax(),'Mortes:',dados_idade.groupby('fx_etaria').sum('total')['total'].max())
-  min = ('faixa etaria:',dados_idade.groupby('fx_etaria').sum('total')['total'].idxmin(),'Mortes:',dados_idade.groupby('fx_etaria').sum('total')['total'].min())
-  return max, min
+  for i in range(len(dados_idade["Grupo de Faixa Etária"])):
+    dados_idade["Grupo de Faixa Etária"][i] = dados_idade["Grupo de Faixa Etária"][i].replace("-"," a ")
+
+  fig = px.bar(dados_idade,x="Grupo de Faixa Etária",y=["Masculino","Feminino"])
+  return fig
 
 def main(): 
     urls = ['https://covid.lais.ufrn.br/dados/boletim/evolucao_municipios.csv',
         'municipios_dados.txt',
         'https://raw.githubusercontent.com/tbrugz/geodata-br/master/geojson/geojs-24-mun.json',
         'https://servicodados.ibge.gov.br/api/v3/malhas/municipios/2410306?formato=application/vnd.geo+json&qualidade=maxima',
-        'https://covid.lais.ufrn.br/dados_abertos/faixa_etaria_pacientes_obitos.csv']
+        'Faixa Etária dos Óbitos por Covid19.csv']
 
     df,municipios,geojson,serra_caiada,dados_idade = carregar_dados(urls)
 
@@ -128,9 +129,9 @@ def main():
     fig_muinicipios,max,min = municipios_obitos (df,municipios,serra_caiada,geojson)
     st.plotly_chart(fig_muinicipios,use_container_width=True)
 
-    max_idade, min_idade = faixa_idade(dados_idade)
-
-    
+    st.subheader('Faixa Étaria dos Obitos')
+    fig_idade = faixa_idade(dados_idade)
+    st.plotly_chart(fig_idade,use_container_width=True)
 
 if __name__ == '__main__': 
     main()
