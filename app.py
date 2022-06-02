@@ -114,6 +114,9 @@ def main():
 
     st.set_page_config(layout="wide")
     st.title("Covid-19 RN")
+    st.write('''Dashboard do covid-19 no estado do Rio Grande do Norte. Trabalho 
+    para disciplina de ALGORITMO E PROGRAMAÇÃO ORIENTADA A OBJETOS da UFRN''')
+    st.write("Feito por: Frankson Souza")
     option = st.selectbox('Média Móvel',('7', '5', '3'))
     col1,col2 = st.columns(2)
 
